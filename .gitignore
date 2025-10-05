@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore environment-specific YAMLs
+src/main/resources/application-dev.yaml
+src/main/resources/application-test.yaml
