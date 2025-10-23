@@ -1,9 +1,6 @@
 package vn.ihqqq.MentorFlow.entity.user;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,16 +11,17 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "user_follow")
+@Entity
 public class UserFollow {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String followId;
 
     @ManyToOne
-    @JoinColumn(name = "followerId")
+    @JoinColumn(name = "follower_id")
     User follower;
 
     @ManyToOne
-    @JoinColumn(name = "followingId")
+    @JoinColumn(name = "following_id")
     User following;
 }

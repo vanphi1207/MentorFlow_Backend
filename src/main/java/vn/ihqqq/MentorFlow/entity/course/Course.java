@@ -1,9 +1,13 @@
 package vn.ihqqq.MentorFlow.entity.course;
 
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.entity.user.UserCourse;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,20 +16,21 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "course")
+@Entity
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID courseId;
+    String courseId;
 
     String titleCourse;
     String description;
-    float priceCourse;
+    BigDecimal priceCourse;
     int timeCourse;
     String videoDemo;
     String thumbnailImg;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    List<ModuleCourse> modules = new ArrayList<>();
+    List<CourseModule> modules = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     List<UserCourse> userCourses = new ArrayList<>();

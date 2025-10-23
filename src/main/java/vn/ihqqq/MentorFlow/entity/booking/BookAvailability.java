@@ -3,6 +3,7 @@ package vn.ihqqq.MentorFlow.entity.booking;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.entity.user.User;
 
 import java.time.LocalDate;
 
@@ -20,13 +21,20 @@ public class BookAvailability {
     String bookAvailabilityId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    User user;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "slotId")
+    @JoinColumn(name = "slot_id")
     ScheduleSlot slot;
 
     LocalDate date;
-    boolean isBooked;
+
+    @OneToOne(mappedBy = "bookAvailability")
+    Booking booking;
+
+    @Transient
+    public boolean isBooked() {
+        return booking != null;
+    }
 }

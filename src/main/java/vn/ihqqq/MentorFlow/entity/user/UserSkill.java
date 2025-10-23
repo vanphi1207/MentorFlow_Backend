@@ -18,7 +18,7 @@ public class UserSkill {
     String skillId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     User user;
 
     String nameSkill;

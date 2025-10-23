@@ -3,8 +3,11 @@ package vn.ihqqq.MentorFlow.entity.blog;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.entity.user.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,14 +23,12 @@ public class Blog {
     String blogId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     User user;
 
     LocalDateTime time;
     String content;
     String imgOrVideo;
-    int countLike;
-    int countComment;
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     List<BlogComment> comments = new ArrayList<>();

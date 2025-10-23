@@ -19,7 +19,7 @@ public class UserInfo {
 
 
     @OneToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     User user;
 
     String info;

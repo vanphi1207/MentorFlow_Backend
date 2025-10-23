@@ -1,6 +1,8 @@
 package vn.ihqqq.MentorFlow.entity.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.ihqqq.MentorFlow.entity.course.Course;
@@ -30,6 +32,8 @@ public class UserCourse {
 
     LocalDate purchaseDate;
     String paymentStatus;
-    int rating;
+    @Min(1)
+    @Max(5)
+    Integer rating;
 
 }

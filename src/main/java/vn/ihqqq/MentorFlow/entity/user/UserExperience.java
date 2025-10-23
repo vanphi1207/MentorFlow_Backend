@@ -20,9 +20,9 @@ public class UserExperience {
     @GeneratedValue(strategy = GenerationType.UUID)
     String experienceId;
 
-    @ManyToMany
-    @JoinColumn(name = "userId")
-    List<User> user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     String nameCompany;
     String position;
@@ -30,9 +30,5 @@ public class UserExperience {
     LocalDate startDate;
     LocalDate endDate;
     String logo;
-
-
-
-
 
 }

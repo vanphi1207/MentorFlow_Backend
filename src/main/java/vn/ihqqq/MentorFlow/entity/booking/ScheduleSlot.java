@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +23,7 @@ public class ScheduleSlot {
 
     LocalTime startTime;
     LocalTime endTime;
+
+    @OneToMany(mappedBy = "slot")
+    private List<BookAvailability> bookAvailabilities = new ArrayList<>();
 }
