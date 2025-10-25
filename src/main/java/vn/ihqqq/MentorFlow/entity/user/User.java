@@ -27,14 +27,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     String userId;
 
-    String fullName;
+    String username;
+    String firstName;
+    String lastName;
+
     @Email
     String email;
     String password;
     LocalDate birthday;
     String gender;
     String role;
-    String avatar;
+    String avatarUrl;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;
