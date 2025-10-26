@@ -2,6 +2,7 @@ package vn.ihqqq.MentorFlow.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.enums.Gender;
 
 import java.time.LocalDate;
 
@@ -19,6 +20,6 @@ public class UserResponse {
     String email;
     String password;
     LocalDate birthday;
-    String gender;
-
+    Gender gender;
+    String genderDisplay;
 }

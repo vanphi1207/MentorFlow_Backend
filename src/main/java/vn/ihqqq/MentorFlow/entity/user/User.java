@@ -8,6 +8,7 @@ import vn.ihqqq.MentorFlow.entity.blog.Blog;
 import vn.ihqqq.MentorFlow.entity.blog.BlogComment;
 import vn.ihqqq.MentorFlow.entity.booking.BookAvailability;
 import vn.ihqqq.MentorFlow.entity.booking.Booking;
+import vn.ihqqq.MentorFlow.enums.Gender;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,9 +36,11 @@ public class User {
     String email;
     String password;
     LocalDate birthday;
-    String gender;
+
+    @Enumerated(EnumType.STRING)
+    Gender gender;
+
     String role;
-    String avatarUrl;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;

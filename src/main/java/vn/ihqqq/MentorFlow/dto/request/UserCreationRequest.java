@@ -3,6 +3,7 @@ package vn.ihqqq.MentorFlow.dto.request;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.enums.Gender;
 
 import java.time.LocalDate;
 
@@ -24,5 +25,6 @@ public class UserCreationRequest {
     String password;
 
     LocalDate birthday;
-    String gender;
+
+    Gender gender;
 }

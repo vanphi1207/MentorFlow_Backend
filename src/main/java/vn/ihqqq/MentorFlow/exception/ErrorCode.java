@@ -15,6 +15,7 @@ public enum ErrorCode {
     PASSWORD_INVALID(1004, "Password must be at least 8 characters "),
     USER_NOT_EXISTED(1005, "User not existed"),
     UNAUTHENTICATED(1006, "Unauthenticated"),
+    GENDER_INVALID(1007, "Gender must be MALE, FEMALE, OTHER, or PREFER_NOT_TO_SAY"),
     ;
 
     ErrorCode(int code, String message) {
