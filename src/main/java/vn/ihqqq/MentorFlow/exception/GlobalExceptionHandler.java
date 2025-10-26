@@ -1,6 +1,7 @@
 package vn.ihqqq.MentorFlow.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,5 +51,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(apiResponse);
 
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    ResponseEntity<ApiResponse> handlingHttpMessageNotReadable(HttpMessageNotReadableException exception) {
+        ApiResponse apiResponse = new ApiResponse();
+
+        if(exception.getMessage() != null && exception.getMessage().contains("Gender")) {
+            apiResponse.setCode(ErrorCode.GENDER_INVALID.getCode());
+            apiResponse.setMessage(ErrorCode.GENDER_INVALID.getMessage());
+        }
+
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 }

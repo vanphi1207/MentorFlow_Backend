@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.ihqqq.MentorFlow.enums.Gender;
+import vn.ihqqq.MentorFlow.validator.ValidGender;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,7 @@ public class UserUpdateRequest {
     String password;
     LocalDate birthday;
 
+    @ValidGender
     Gender gender;
 
 }
