@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import vn.ihqqq.MentorFlow.enums.Gender;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -22,4 +23,5 @@ public class UserResponse {
     LocalDate birthday;
     Gender gender;
     String genderDisplay;
+    Set<RoleResponse> roles;
 }

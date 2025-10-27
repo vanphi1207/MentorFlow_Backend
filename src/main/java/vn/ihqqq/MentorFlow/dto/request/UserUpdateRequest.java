@@ -7,6 +7,7 @@ import vn.ihqqq.MentorFlow.enums.Gender;
 import vn.ihqqq.MentorFlow.validator.ValidGender;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,4 +28,5 @@ public class UserUpdateRequest {
     @ValidGender
     Gender gender;
 
+    List<String> roles;
 }

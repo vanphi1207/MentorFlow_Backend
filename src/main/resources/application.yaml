@@ -6,6 +6,7 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/mentorflow
+    driverClassName: "com.mysql.cj.jdbc.Driver"
     username: root
     password: root
   jpa:
@@ -15,3 +16,5 @@ spring:
 
 jwt:
   signerKey: "5549a87579325eddd565206e60790231367c90da4002b14239aa656e2f197c20"
+  valid-duration: 3600 # in second
+  refreshable-duration: 36000 # in seconds

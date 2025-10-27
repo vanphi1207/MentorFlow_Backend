@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.entity.authentication.Role;
 import vn.ihqqq.MentorFlow.entity.blog.Blog;
 import vn.ihqqq.MentorFlow.entity.blog.BlogComment;
 import vn.ihqqq.MentorFlow.entity.booking.BookAvailability;
@@ -13,6 +14,7 @@ import vn.ihqqq.MentorFlow.enums.Gender;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,7 +42,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    String role;
+    @ManyToMany
+    Set<Role> roles;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;

@@ -17,10 +17,12 @@ public interface UserMapper {
     @Mapping(target = "genderDisplay", source = "gender", qualifiedByName = "genderToDisplay")
     UserResponse toUserResponse(User user);
 
+    @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 
     @Named("genderToDisplay")
     default String genderToDisplay(Gender gender) {
         return gender != null ? gender.getDisplayName() : null;
     }
+
 }

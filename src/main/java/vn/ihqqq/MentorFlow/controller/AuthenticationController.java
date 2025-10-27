@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.ihqqq.MentorFlow.dto.request.AuthenticationRequest;
 import vn.ihqqq.MentorFlow.dto.request.IntrospectRequest;
+import vn.ihqqq.MentorFlow.dto.request.LogoutRequest;
+import vn.ihqqq.MentorFlow.dto.request.RefreshRequest;
 import vn.ihqqq.MentorFlow.dto.response.ApiResponse;
 import vn.ihqqq.MentorFlow.dto.response.AuthenticationResponse;
 import vn.ihqqq.MentorFlow.dto.response.IntrospectResponse;
@@ -41,5 +43,18 @@ public class AuthenticationController {
                 .result(result)
                 .build();
 
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder().build();
     }
 }
