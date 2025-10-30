@@ -2,6 +2,9 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 spring:
   datasource:
@@ -18,3 +21,9 @@ jwt:
   signerKey: "5549a87579325eddd565206e60790231367c90da4002b14239aa656e2f197c20"
   valid-duration: 3600 # in second
   refreshable-duration: 36000 # in seconds
+
+#cloud
+cloudinary:
+  cloud-name: dcpj8cfng
+  api-key:  918924966822386
+  api-secret: AgeAnoSbgJibSGcPeAhUl_-CPEI

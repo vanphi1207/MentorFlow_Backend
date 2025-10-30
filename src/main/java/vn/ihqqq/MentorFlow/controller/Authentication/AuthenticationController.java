@@ -1,4 +1,4 @@
-package vn.ihqqq.MentorFlow.controller;
+package vn.ihqqq.MentorFlow.controller.Authentication;
 
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;

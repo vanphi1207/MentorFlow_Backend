@@ -1,4 +1,4 @@
-package vn.ihqqq.MentorFlow.controller;
+package vn.ihqqq.MentorFlow.controller.User;
 
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

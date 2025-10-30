@@ -1,5 +1,6 @@
 package vn.ihqqq.MentorFlow.configuration;
 
+import jakarta.servlet.MultipartConfigElement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -7,10 +8,12 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.unit.DataSize;
 import vn.ihqqq.MentorFlow.constant.PredefinedRole;
 import vn.ihqqq.MentorFlow.entity.authentication.Role;
 import vn.ihqqq.MentorFlow.entity.user.User;
@@ -67,5 +70,13 @@ public class ApplicationInitConfig {
             }
             log.info("Application initialization completed .....");
         };
+    }
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setMaxFileSize(DataSize.ofMegabytes(200));
+        factory.setMaxRequestSize(DataSize.ofMegabytes(200));
+        return factory.createMultipartConfig();
     }
 }
