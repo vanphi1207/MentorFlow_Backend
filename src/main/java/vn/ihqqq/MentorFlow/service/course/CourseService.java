@@ -10,6 +10,7 @@
     import org.springframework.stereotype.Service;
     import org.springframework.web.multipart.MultipartFile;
     import vn.ihqqq.MentorFlow.dto.request.course.CourseCreationRequest;
+    import vn.ihqqq.MentorFlow.dto.request.course.CourseUpdateRequest;
     import vn.ihqqq.MentorFlow.dto.response.course.CourseResponse;
     import vn.ihqqq.MentorFlow.entity.course.Course;
     import vn.ihqqq.MentorFlow.entity.user.User;
@@ -27,6 +28,7 @@
     import java.nio.file.StandardCopyOption;
     import java.time.LocalDateTime;
     import java.util.Arrays;
+    import java.util.List;
     import java.util.Map;
     import org.apache.commons.lang3.StringUtils;
     import java.util.UUID;
@@ -53,19 +55,19 @@
 
             Course course = courseMapper.toCourse(request);
 
-            // ✅ Upload ảnh
+            // Upload ảnh
             if (fileImg != null && !fileImg.isEmpty()) {
                 String thumbnailUrl = uploadThumbnail(fileImg);
                 course.setThumbnailImg(thumbnailUrl);
             }
 
-            // ✅ Upload video
+            // Upload video
             if (fileVideo != null && !fileVideo.isEmpty()) {
                 String videoUrl = uploadVideoDemo(fileVideo);
                 course.setVideoDemo(videoUrl);
             }
 
-            // ✅ Lưu DB
+            // Lưu DB
             Course savedCourse = courseRepository.save(course);
             return courseMapper.toCourseResponse(savedCourse);
         }
@@ -94,13 +96,13 @@
             String publicValue = generatePublicValue(file.getOriginalFilename());
             String extension = getFileExtension(file.getOriginalFilename());
 
-            // ✅ Tạo file tạm có đuôi .mp4
+            // Tạo file tạm có đuôi .mp4
             File fileUpload = File.createTempFile(UUID.randomUUID().toString(), "." + extension);
             try (InputStream is = file.getInputStream()) {
                 Files.copy(is, fileUpload.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            // ✅ Upload với resource_type = video
+            //upload với resource_type = video
             cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
                     "public_id", publicValue,
                     "folder", "course",
@@ -109,7 +111,7 @@
 
             cleanDisk(fileUpload);
 
-            // ✅ Trả về URL có phần mở rộng
+            //Trả về URL có phần mở rộng
             return cloudinary.url()
                     .resourceType("video")
                     .generate(publicValue + "." + extension);
@@ -150,6 +152,120 @@
             }
         }
 
+
+        public CourseResponse getCourseById(String id){
+            Course course = courseRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.COURSE_NOT_FOUND));
+
+            return courseMapper.toCourseResponse(course);
+        }
+
+        public List<CourseResponse> GetAllCourses(){
+            List<Course> courses = courseRepository.findAll();
+            return courses.stream()
+                    .map(courseMapper::toCourseResponse)
+                    .toList();
+        }
+
+        @Transactional
+        public CourseResponse updateCourse(CourseUpdateRequest request,
+                                           String id,
+                                           MultipartFile fileImg,
+                                           MultipartFile fileVideo) throws IOException {
+            Course course = courseRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+
+            // Cập nhật thông tin cơ bản
+            courseMapper.updateCourse(request, course);
+
+            if (fileImg != null && !fileImg.isEmpty()) {
+                //Xóa ảnh cũ trên Cloudinary (nếu có)
+                if (course.getThumbnailImg() != null) {
+                    deleteFromCloudinary(course.getThumbnailImg(), "image");
+                }
+
+                // Upload ảnh mới
+                String thumbnailUrl = uploadThumbnail(fileImg);
+                course.setThumbnailImg(thumbnailUrl);
+            }
+
+            // Nếu có video mới
+            if (fileVideo != null && !fileVideo.isEmpty()) {
+                // 🔥 Xóa video cũ
+                if (course.getVideoDemo() != null) {
+                    deleteFromCloudinary(course.getVideoDemo(), "video");
+                }
+
+                String videoUrl = uploadVideoDemo(fileVideo);
+                course.setVideoDemo(videoUrl);
+            }
+
+            //  Cập nhật DB
+            Course updatedCourse = courseRepository.save(course);
+            return courseMapper.toCourseResponse(updatedCourse);
+
+        }
+
+        public void deleteFromCloudinary(String fileUrl, String resourceType) {
+            try {
+                String publicId = extractPublicId(fileUrl);
+                if (publicId == null) {
+                    log.warn("Không thể extract publicId từ URL: {}", fileUrl);
+                    return;
+                }
+
+                Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.asMap(
+                        "resource_type", resourceType
+                ));
+
+                log.info("Deleted {} from Cloudinary: {} | Result: {}", resourceType, publicId, result);
+            } catch (Exception e) {
+                log.error("Failed to delete {} from Cloudinary: {}", resourceType, e.getMessage());
+            }
+        }
+
+
+        private String extractPublicId(String url) {
+            try {
+                String[] parts = url.split("/");
+                int uploadIndex = Arrays.asList(parts).indexOf("upload");
+                if (uploadIndex == -1 || uploadIndex + 1 >= parts.length) {
+                    throw new IllegalArgumentException("Invalid Cloudinary URL: " + url);
+                }
+
+                String afterUpload = String.join("/", Arrays.copyOfRange(parts, uploadIndex + 1, parts.length));
+
+                if (!afterUpload.startsWith("course/")) {
+                    afterUpload = "course/" + afterUpload;
+                }
+
+                String publicId = afterUpload.substring(0, afterUpload.lastIndexOf('.'));
+
+                log.info("Extracted publicId: {}", publicId);
+                return publicId;
+            } catch (Exception e) {
+                log.error("Lỗi extract publicId từ URL {}: {}", url, e.getMessage());
+                return null;
+            }
+        }
+
+
+
+        @Transactional
+        public void deleteCourse(String id) {
+            Course course = courseRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+
+            // Xóa ảnh nếu có
+            if (course.getThumbnailImg() != null) {
+                deleteFromCloudinary(course.getThumbnailImg(), "image");
+            }
+
+            // Xóa video nếu có
+            if (course.getVideoDemo() != null) {
+                deleteFromCloudinary(course.getVideoDemo(), "video");
+            }
+            courseRepository.deleteById(id);
+        }
 
     }
 

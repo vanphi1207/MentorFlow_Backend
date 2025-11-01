@@ -27,6 +27,7 @@ public enum ErrorCode {
     NAME_MODULE_EXISTED(2002, "Name module existed", HttpStatus.CONFLICT),
     COURSE_EXISTED(2003, "Course existed", HttpStatus.CONFLICT),
     MODULE_NOT_FOUND(2004, "Module not found", HttpStatus.NOT_FOUND),
+    COURSE_NOT_FOUND(2005, "Course not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
