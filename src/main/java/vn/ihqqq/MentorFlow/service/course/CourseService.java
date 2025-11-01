@@ -78,7 +78,10 @@
             String extension = getFileName(file.getOriginalFilename())[1];
             File fileUpload = convert(file);
             log.info("fileUpload is: {}", fileUpload);
-            cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap("public_id", publicValue));
+            cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
+                    "public_id", publicValue,
+                    "folder", "course"
+            ));
 
             cleanDisk(fileUpload);
 
@@ -100,6 +103,7 @@
             // ✅ Upload với resource_type = video
             cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
                     "public_id", publicValue,
+                    "folder", "course",
                     "resource_type", "video"
             ));
 

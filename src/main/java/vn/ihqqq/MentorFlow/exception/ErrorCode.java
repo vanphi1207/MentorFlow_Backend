@@ -24,12 +24,9 @@ public enum ErrorCode {
 
     // Course
     TITTLE_COURSE_EXISTED(2001, "Title course existed", HttpStatus.CONFLICT),
-    COURSE_NOT_FOUND(2002, "Course not found", HttpStatus.NOT_FOUND),
-    FILE_TOO_LARGE(2003, "Kích thước file vượt quá giới hạn cho phép", HttpStatus.CONFLICT),
-    INVALID_FILE_TYPE(2004, "Định dạng file không được hỗ trợ", HttpStatus.CONFLICT),
-    UPLOAD_THUMBNAIL_FAILED(2005, "Upload thumbnail thất bại", HttpStatus.CONFLICT),
-    UPLOAD_VIDEO_FAILED(2006, "Upload video thất bại" , HttpStatus.CONFLICT),
-    FILE_EMPTY(2007, "File không được để trống", HttpStatus.CONFLICT),;
+    NAME_MODULE_EXISTED(2002, "Name module existed", HttpStatus.CONFLICT),
+    COURSE_EXISTED(2003, "Course existed", HttpStatus.CONFLICT),
+    MODULE_NOT_FOUND(2004, "Module not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

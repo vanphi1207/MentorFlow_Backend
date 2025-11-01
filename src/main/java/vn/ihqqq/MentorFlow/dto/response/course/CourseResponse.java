@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseResponse {
+    String courseId;
     String titleCourse;
     String description;
     BigDecimal priceCourse;
