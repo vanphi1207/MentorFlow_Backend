@@ -6,13 +6,14 @@ import vn.ihqqq.MentorFlow.enums.Level;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CourseDetails {
+public class CourseDetailsResponse {
     String courseId;
     String titleCourse;
     String description;
@@ -25,15 +26,5 @@ public class CourseDetails {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public class ModuleResponse {
-        String moduleId;
-        String nameModule;
-        String description;
-        int timeModule;
-    }
+    List<ModuleWithLessonResponse> modules;
 }

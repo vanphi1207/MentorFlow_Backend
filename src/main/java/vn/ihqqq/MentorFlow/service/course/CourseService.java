@@ -11,6 +11,7 @@
     import org.springframework.web.multipart.MultipartFile;
     import vn.ihqqq.MentorFlow.dto.request.course.CourseCreationRequest;
     import vn.ihqqq.MentorFlow.dto.request.course.CourseUpdateRequest;
+    import vn.ihqqq.MentorFlow.dto.response.course.CourseDetailsResponse;
     import vn.ihqqq.MentorFlow.dto.response.course.CourseResponse;
     import vn.ihqqq.MentorFlow.entity.course.Course;
     import vn.ihqqq.MentorFlow.entity.user.User;
@@ -154,7 +155,8 @@
 
 
         public CourseResponse getCourseById(String id){
-            Course course = courseRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.COURSE_NOT_FOUND));
+            Course course = courseRepository.findById(id)
+                    .orElseThrow(()-> new AppException(ErrorCode.COURSE_NOT_FOUND));
 
             return courseMapper.toCourseResponse(course);
         }
@@ -190,7 +192,7 @@
 
             // Nếu có video mới
             if (fileVideo != null && !fileVideo.isEmpty()) {
-                // 🔥 Xóa video cũ
+                // Xóa video cũ
                 if (course.getVideoDemo() != null) {
                     deleteFromCloudinary(course.getVideoDemo(), "video");
                 }
@@ -266,6 +268,31 @@
             }
             courseRepository.deleteById(id);
         }
+
+
+        public CourseDetailsResponse getCourseDetails(String courseId) {
+            Course course = courseRepository.findById(courseId)
+                    .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+
+            return CourseDetailsResponse.builder()
+                    .courseId(course.getCourseId())
+                    .titleCourse(course.getTitleCourse())
+                    .description(course.getDescription())
+                    .priceCourse(course.getPriceCourse())
+                    .timeCourse(course.getTimeCourse())
+                    .level(course.getLevel())
+                    .enrolledCount(course.getEnrolledCount())
+                    .thumbnailImg(course.getThumbnailImg())
+                    .videoDemo(course.getVideoDemo())
+                    .createdAt(course.getCreatedAt())
+                    .updatedAt(course.getUpdatedAt())
+                    .modules(course.getModules()
+                            .stream()
+                            .map(courseMapper::toModuleWithLessonResponse)
+                            .toList())
+                    .build();
+        }
+
 
     }
 

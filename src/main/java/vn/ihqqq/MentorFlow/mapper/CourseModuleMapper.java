@@ -11,6 +11,7 @@ import vn.ihqqq.MentorFlow.entity.course.CourseModule;
 @Mapper(componentModel = "spring")
 public interface CourseModuleMapper {
     CourseModule toModuleCourse(ModuleCreationRequest request);
+
     void updateModuleFromRequest(ModuleUpdateRequest request, @MappingTarget CourseModule module);
 
     @Mapping(source = "course.courseId", target = "courseId")

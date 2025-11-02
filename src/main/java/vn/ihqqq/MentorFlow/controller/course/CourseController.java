@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.ihqqq.MentorFlow.dto.request.course.CourseCreationRequest;
 import vn.ihqqq.MentorFlow.dto.request.course.CourseUpdateRequest;
 import vn.ihqqq.MentorFlow.dto.response.ApiResponse;
+import vn.ihqqq.MentorFlow.dto.response.course.CourseDetailsResponse;
 import vn.ihqqq.MentorFlow.dto.response.course.CourseResponse;
 import vn.ihqqq.MentorFlow.service.course.CourseService;
 
@@ -41,6 +42,13 @@ public class CourseController {
     public ApiResponse<CourseResponse> getCourseById(@PathVariable String courseId) {
         return ApiResponse.<CourseResponse>builder()
                 .result(courseService.getCourseById(courseId))
+                .build();
+    }
+
+    @GetMapping("/courseDetails/{courseId}")
+    public ApiResponse<CourseDetailsResponse> getCourseDetails(@PathVariable String courseId) {
+        return ApiResponse.<CourseDetailsResponse>builder()
+                .result(courseService.getCourseDetails(courseId))
                 .build();
     }
 
