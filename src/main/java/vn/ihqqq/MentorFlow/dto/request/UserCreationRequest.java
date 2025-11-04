@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.ihqqq.MentorFlow.enums.Gender;
+import vn.ihqqq.MentorFlow.validator.DobConstraint;
 import vn.ihqqq.MentorFlow.validator.ValidGender;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public class UserCreationRequest {
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
 
+    @DobConstraint(min = 10, message = "INVALID_DOB")
     LocalDate birthday;
 
     @ValidGender

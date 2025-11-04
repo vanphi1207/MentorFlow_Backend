@@ -3,10 +3,7 @@ package vn.ihqqq.MentorFlow.dto.request.course;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 import vn.ihqqq.MentorFlow.enums.Level;
-import vn.ihqqq.MentorFlow.validator.ValidGender;
-
 import java.math.BigDecimal;
 
 @Data

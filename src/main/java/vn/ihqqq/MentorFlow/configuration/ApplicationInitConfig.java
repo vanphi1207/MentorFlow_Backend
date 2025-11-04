@@ -10,7 +10,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.unit.DataSize;
@@ -61,7 +60,7 @@ public class ApplicationInitConfig {
 
                 User user = User.builder()
                         .username(ADMIN_USERNAME)
-                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                        .password(passwordEncoder.encode(   ADMIN_PASSWORD))
                         .roles(roles)
                         .build();
 

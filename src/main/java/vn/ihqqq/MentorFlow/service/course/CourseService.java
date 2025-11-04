@@ -14,8 +14,6 @@
     import vn.ihqqq.MentorFlow.dto.response.course.CourseDetailsResponse;
     import vn.ihqqq.MentorFlow.dto.response.course.CourseResponse;
     import vn.ihqqq.MentorFlow.entity.course.Course;
-    import vn.ihqqq.MentorFlow.entity.user.User;
-    import vn.ihqqq.MentorFlow.enums.Level;
     import vn.ihqqq.MentorFlow.exception.AppException;
     import vn.ihqqq.MentorFlow.exception.ErrorCode;
     import vn.ihqqq.MentorFlow.mapper.CourseMapper;
@@ -27,7 +25,7 @@
     import java.nio.file.Files;
     import java.nio.file.Path;
     import java.nio.file.StandardCopyOption;
-    import java.time.LocalDateTime;
+
     import java.util.Arrays;
     import java.util.List;
     import java.util.Map;
