@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.ihqqq.MentorFlow.entity.user.User;
+import vn.ihqqq.MentorFlow.enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,7 +30,10 @@ public class Booking {
     String topic;
     String connectionForm;
     LocalDate dateBook;
-    String status;
+
+    @Enumerated(EnumType.STRING)
+    BookingStatus status;
+
     String note;
 
     @OneToOne

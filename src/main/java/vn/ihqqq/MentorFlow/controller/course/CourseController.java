@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +27,7 @@ public class CourseController {
     CourseService courseService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public ApiResponse<CourseResponse> createCourse(
             @RequestPart("data") @Valid CourseCreationRequest request,
             @RequestPart(value = "fileImg", required = false) MultipartFile fileImg,
@@ -39,6 +39,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
+    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public ApiResponse<CourseResponse> getCourseById(@PathVariable String courseId) {
         return ApiResponse.<CourseResponse>builder()
                 .result(courseService.getCourseById(courseId))
@@ -46,6 +47,7 @@ public class CourseController {
     }
 
     @GetMapping("/courseDetails/{courseId}")
+    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public ApiResponse<CourseDetailsResponse> getCourseDetails(@PathVariable String courseId) {
         return ApiResponse.<CourseDetailsResponse>builder()
                 .result(courseService.getCourseDetails(courseId))
@@ -53,6 +55,7 @@ public class CourseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public ApiResponse<List<CourseResponse>> getAllCourses() {
         return ApiResponse.<List<CourseResponse>>builder()
                 .result(courseService.GetAllCourses())
@@ -60,6 +63,7 @@ public class CourseController {
     }
 
     @PutMapping("/{courseId}")
+    @PreAuthorize("hasAuthority('UPDATE_COURSE')")
     public ApiResponse<CourseResponse> updateCourse(@RequestPart("data") @Valid CourseUpdateRequest request,
                                                     @PathVariable String courseId,
                                                     @RequestPart(value = "fileImg", required = false) MultipartFile fileImg,
@@ -72,6 +76,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/{courseId}")
+    @PreAuthorize("hasAuthority('DELETE_COURSE')")
     public ApiResponse<String> deleteCourse(@PathVariable String courseId) {
         courseService.deleteCourse(courseId);
         return ApiResponse.<String>builder()

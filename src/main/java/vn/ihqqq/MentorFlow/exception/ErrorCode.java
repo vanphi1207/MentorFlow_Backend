@@ -22,17 +22,33 @@ public enum ErrorCode {
     UNAUTHORIZED(1008, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1009, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
 
-
-
     // Course
     TITTLE_COURSE_EXISTED(2001, "Title course existed", HttpStatus.CONFLICT),
     NAME_MODULE_EXISTED(2002, "Name module existed", HttpStatus.CONFLICT),
     COURSE_EXISTED(2003, "Course existed", HttpStatus.CONFLICT),
     MODULE_NOT_FOUND(2004, "Module not found", HttpStatus.NOT_FOUND),
     COURSE_NOT_FOUND(2005, "Course not found", HttpStatus.NOT_FOUND),
-
     TITLE_LESSON_EXISTED(2006, "Title lesson existed", HttpStatus.CONFLICT),
     LESSON_NOT_FOUND(2007, "Lesson does not exist", HttpStatus.NOT_FOUND),
+
+    // Booking & Schedule
+    SLOT_NOT_FOUND(3001, "Schedule slot not found", HttpStatus.NOT_FOUND),
+    SLOT_ALREADY_EXISTS(3002, "Schedule slot already exists", HttpStatus.CONFLICT),
+    AVAILABILITY_NOT_FOUND(3003, "Book availability not found", HttpStatus.NOT_FOUND),
+    SLOT_ALREADY_BOOKED(3004, "This time slot has already been booked", HttpStatus.CONFLICT),
+    BOOKING_NOT_FOUND(3005, "Booking not found", HttpStatus.NOT_FOUND),
+    CANNOT_BOOK_OWN_SLOT(3006, "You cannot book your own availability slot", HttpStatus.BAD_REQUEST),
+    CANNOT_CANCEL_BOOKING(3007, "Cannot cancel this booking", HttpStatus.BAD_REQUEST),
+    SLOT_TIME_INVALID(3008, "Start time must be before end time", HttpStatus.BAD_REQUEST),
+    SLOT_DURATION_INVALID(3009, "Slot duration must be least 30 minutes", HttpStatus.BAD_REQUEST),
+    AVAILABILITY_PAST_DATE(3010, "Cannot create availability for past dates", HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED_BOOKING_ACCESS(3011, "You don't have permission to access this booking", HttpStatus.FORBIDDEN),
+    BOOKING_TIME_CONFLICT(3012, "You already booking at this time", HttpStatus.BAD_REQUEST),
+    BOOKING_PAST_DATE(3013, "Cannot book a slot in the past", HttpStatus.BAD_REQUEST),
+    BOOKING_TOO_CLOSE(3014, "Booking must be at least 2 hours in advance", HttpStatus.BAD_REQUEST),
+    MAX_BOOKINGS_REACHED(3015, "You have reached the maximum number of bookings", HttpStatus.BAD_REQUEST),
+    BOOKING_NOT_PENDING(3016, "This booking is not pending", HttpStatus.BAD_REQUEST),
+    BOOKING_NOT_CONFIRMED(3017, "This booking is not confirmed", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
