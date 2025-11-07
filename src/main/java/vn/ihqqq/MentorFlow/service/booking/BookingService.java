@@ -53,6 +53,9 @@ public class BookingService {
         validateTimeConflict(student, availability);
 
         Booking booking = buildBooking(student, availability, request);
+
+        availability.setBooking(booking);
+
         Booking savedBooking = bookingRepository.save(booking);
 
         log.info("Booking created: bookingId={}, studentId={}, mentorId={}, date={}, slot={}",
@@ -101,7 +104,6 @@ public class BookingService {
         User currentUser = getCurrentUser();
         Booking booking = findBookingById(bookingId);
 
-        // Validate permission: Only student or mentor can update
         validateUpdatePermission(currentUser, booking);
 
         bookingMapper.updateBooking(request, booking);
@@ -245,7 +247,6 @@ public class BookingService {
                 .findByUser_UserIdAndDateBook(student.getUserId(), bookingDate);
 
         for (Booking existing : existingBookings) {
-            // Skip cancelled bookings
             if (BookingStatus.CANCELLED.equals(existing.getStatus())) {
                 continue;
             }

@@ -30,7 +30,7 @@ public class BookAvailability {
 
     LocalDate date;
 
-    @OneToOne(mappedBy = "bookAvailability")
+    @OneToOne(mappedBy = "bookAvailability", fetch = FetchType.LAZY)
     Booking booking;
 
     @Transient

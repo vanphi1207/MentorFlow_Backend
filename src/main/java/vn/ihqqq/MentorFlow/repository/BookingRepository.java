@@ -13,17 +13,13 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, String> {
 
-    // Tìm booking theo user
     List<Booking> findByUser_UserId(String userId);
 
-    // Tìm booking theo status (sử dụng Enum)
-    List<Booking> findByStatus(BookingStatus status);
+//    List<Booking> findByStatus(BookingStatus status);
 
-    // Tìm booking theo user và status
     List<Booking> findByUser_UserIdAndStatus(String userId, BookingStatus status);
 
-    // Tìm booking theo ngày
-    List<Booking> findByDateBook(LocalDate date);
+//    List<Booking> findByDateBook(LocalDate date);
 
     List<Booking> findByUser_UserIdAndDateBook(String userId, LocalDate date);
 
