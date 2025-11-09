@@ -38,6 +38,7 @@ public class User {
     String email;
     String password;
     LocalDate birthday;
+    String avt;
 
     @Enumerated(EnumType.STRING)
     Gender gender;

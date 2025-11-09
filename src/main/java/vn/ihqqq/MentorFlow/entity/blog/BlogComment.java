@@ -22,13 +22,21 @@ public class BlogComment {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
-    private Blog blog;
+    Blog blog;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    User user;
 
-    private LocalDateTime time;
-    private String content;
-    private int countLike;
+    LocalDateTime createdAt;
+
+    String content;
+    int countLike;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 }

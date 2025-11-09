@@ -31,6 +31,11 @@ public enum ErrorCode {
 
     TITLE_LESSON_EXISTED(2006, "Title lesson existed", HttpStatus.CONFLICT),
     LESSON_NOT_FOUND(2007, "Lesson does not exist", HttpStatus.NOT_FOUND),
+
+
+    // Blog
+    BLOG_NOT_FOUND(2008, "Blog not found", HttpStatus.NOT_FOUND),
+    COMMENT_NOT_FOUND(2009, "Comment not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

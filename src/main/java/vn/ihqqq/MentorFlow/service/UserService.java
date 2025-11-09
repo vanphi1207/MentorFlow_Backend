@@ -91,6 +91,13 @@ public class UserService {
                     -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 
+    public User getCurrentUser() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        return userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
