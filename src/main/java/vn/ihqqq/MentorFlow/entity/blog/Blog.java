@@ -28,7 +28,15 @@ public class Blog {
 
     LocalDateTime time;
     String content;
-    String imgOrVideo;
+    String img;
+    LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     List<BlogComment> comments = new ArrayList<>();

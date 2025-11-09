@@ -6,21 +6,21 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 public enum ErrorCode {
 
-    // User
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(1001, "Invalid key", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
-    USERNAME_INVALID(1003, "Username must be at least {min} character", HttpStatus.BAD_REQUEST),
-    PASSWORD_INVALID(1004, "Password must be at least {min} characters ", HttpStatus.BAD_REQUEST),
+    USERNAME_INVALID(1003, "Username must be at least 3 character", HttpStatus.BAD_REQUEST),
+    PASSWORD_INVALID(1004, "Password must be at least 8 characters ", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     GENDER_INVALID(1007, "Gender must be MALE, FEMALE, OTHER, or PREFER_NOT_TO_SAY", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(1008, "You do not have permission", HttpStatus.FORBIDDEN),
-    INVALID_DOB(1009, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+
+
 
     // Course
     TITTLE_COURSE_EXISTED(2001, "Title course existed", HttpStatus.CONFLICT),
@@ -28,6 +28,7 @@ public enum ErrorCode {
     COURSE_EXISTED(2003, "Course existed", HttpStatus.CONFLICT),
     MODULE_NOT_FOUND(2004, "Module not found", HttpStatus.NOT_FOUND),
     COURSE_NOT_FOUND(2005, "Course not found", HttpStatus.NOT_FOUND),
+
     TITLE_LESSON_EXISTED(2006, "Title lesson existed", HttpStatus.CONFLICT),
     LESSON_NOT_FOUND(2007, "Lesson does not exist", HttpStatus.NOT_FOUND),
 
@@ -49,6 +50,11 @@ public enum ErrorCode {
     MAX_BOOKINGS_REACHED(3015, "You have reached the maximum number of bookings", HttpStatus.BAD_REQUEST),
     BOOKING_NOT_PENDING(3016, "This booking is not pending", HttpStatus.BAD_REQUEST),
     BOOKING_NOT_CONFIRMED(3017, "This booking is not confirmed", HttpStatus.BAD_REQUEST),
+
+
+    // Blog
+    BLOG_NOT_FOUND(2008, "Blog not found", HttpStatus.NOT_FOUND),
+    COMMENT_NOT_FOUND(2009, "Comment not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
