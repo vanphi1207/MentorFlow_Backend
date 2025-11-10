@@ -19,4 +19,6 @@ public class BlogResponse {
     String timeAgo;
     List<CommentResponse> comments;
     int commentCount;
+    Long totalLikes;
+    Boolean isLiked;
 }

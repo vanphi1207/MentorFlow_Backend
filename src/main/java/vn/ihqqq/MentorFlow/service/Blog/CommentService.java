@@ -40,7 +40,6 @@ public class CommentService {
                 .blog(blog)
                 .user(currentUser)
                 .content(request.getContent())
-                .countLike(0)
                 .build();
 
         BlogComment savedComment = commentRespository.save(comment);

@@ -18,6 +18,7 @@ import vn.ihqqq.MentorFlow.entity.user.User;
 import vn.ihqqq.MentorFlow.exception.AppException;
 import vn.ihqqq.MentorFlow.exception.ErrorCode;
 import vn.ihqqq.MentorFlow.mapper.BlogMapper;
+import vn.ihqqq.MentorFlow.repository.BlogLikeRepository;
 import vn.ihqqq.MentorFlow.repository.BlogRepository;
 import vn.ihqqq.MentorFlow.service.UserService;
 
@@ -41,6 +42,7 @@ public class BlogService {
     BlogMapper blogMapper;
     Cloudinary cloudinary;
     UserService userService;
+    BlogLikeRepository blogLikeRepository;
 
     public BlogResponse createBlog(BlogCreationRequest request,
                                    MultipartFile fileImg) throws IOException {
@@ -110,7 +112,16 @@ public class BlogService {
         Blog blog = blogRepository.findById(id).orElseThrow(
                 ()-> new AppException(ErrorCode.BLOG_NOT_FOUND));
 
-        return blogMapper.toBlogResponse(blog);
+        BlogResponse response = blogMapper.toBlogResponse(blog);
+
+        Long totalLikes = blogLikeRepository.countByBlog_BlogId(blog.getBlogId());
+        response.setTotalLikes(totalLikes);
+
+        User currentUser = userService.getCurrentUser();
+        boolean isLiked = blogLikeRepository.existsByBlog_BlogIdAndUser_UserId(blog.getBlogId(), currentUser.getUserId());
+        response.setIsLiked(isLiked);
+
+        return response;
     }
 
     public List<BlogResponse> getALlBlog(){
@@ -172,7 +183,6 @@ public class BlogService {
             String afterUpload = String.join("/",
                     Arrays.copyOfRange(parts, uploadIndex + 1, parts.length));
 
-            // 🚨 XÓA phần thêm "blog/" cứng - CHỈ giữ phần này
             String publicId = afterUpload.substring(0, afterUpload.lastIndexOf('.'));
 
             log.info("Extracted publicId: {}", publicId);

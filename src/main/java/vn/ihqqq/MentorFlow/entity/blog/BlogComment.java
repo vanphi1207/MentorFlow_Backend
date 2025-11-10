@@ -31,7 +31,6 @@ public class BlogComment {
     LocalDateTime createdAt;
 
     String content;
-    int countLike;
 
     @PrePersist
     protected void onCreate() {

@@ -66,5 +66,4 @@ public class BlogController {
                 .result("Blog deleted")
                 .build();
     }
-
 }
