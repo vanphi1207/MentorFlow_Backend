@@ -13,13 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.ihqqq.MentorFlow.dto.request.Blog.BlogCreationRequest;
 import vn.ihqqq.MentorFlow.dto.request.Blog.BlogUpdateRequest;
 import vn.ihqqq.MentorFlow.dto.response.Blog.BlogResponse;
+import vn.ihqqq.MentorFlow.dto.response.Blog.CommentResponse;
 import vn.ihqqq.MentorFlow.entity.blog.Blog;
 import vn.ihqqq.MentorFlow.entity.user.User;
 import vn.ihqqq.MentorFlow.exception.AppException;
 import vn.ihqqq.MentorFlow.exception.ErrorCode;
+import vn.ihqqq.MentorFlow.mapper.BlogCommentMapper;
 import vn.ihqqq.MentorFlow.mapper.BlogMapper;
 import vn.ihqqq.MentorFlow.repository.BlogLikeRepository;
 import vn.ihqqq.MentorFlow.repository.BlogRepository;
+import vn.ihqqq.MentorFlow.repository.CommentRespository;
 import vn.ihqqq.MentorFlow.service.UserService;
 
 import java.io.File;
@@ -31,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +47,8 @@ public class BlogService {
     Cloudinary cloudinary;
     UserService userService;
     BlogLikeRepository blogLikeRepository;
+    CommentRespository commentRespository;
+    BlogCommentMapper commentMapper;
 
     public BlogResponse createBlog(BlogCreationRequest request,
                                    MultipartFile fileImg) throws IOException {
@@ -120,6 +126,15 @@ public class BlogService {
         User currentUser = userService.getCurrentUser();
         boolean isLiked = blogLikeRepository.existsByBlog_BlogIdAndUser_UserId(blog.getBlogId(), currentUser.getUserId());
         response.setIsLiked(isLiked);
+
+        List<CommentResponse> comments = commentRespository.findByBlog_BlogId(blog.getBlogId())
+                .stream()
+                .map(commentMapper::toCommentResponse)
+                .collect(Collectors.toList());
+
+        // 6️⃣ Gán danh sách comment và số lượng vào response
+        response.setComments(comments);
+        response.setCommentCount(comments.size());
 
         return response;
     }

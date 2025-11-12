@@ -57,6 +57,12 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(2009, "Comment not found", HttpStatus.NOT_FOUND),
     BLOG_DONT_LIKE(2010, "Blog don't like this", HttpStatus.BAD_REQUEST),
     BLOG_NOT_LIKE(2011, "blog not liked", HttpStatus.BAD_REQUEST),
+
+
+    //MENTOR_REQUEST
+    REQUEST_NOT_FOUND(4001, "request not found", HttpStatus.BAD_REQUEST),
+    REQUEST_BAD_REQUEST(4002, "request bad request", HttpStatus.BAD_REQUEST),
+    SUBMITTED_REQUEST(4003, "You already submitted a mentor request", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

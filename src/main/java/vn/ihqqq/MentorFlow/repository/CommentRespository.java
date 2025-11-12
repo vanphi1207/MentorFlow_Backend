@@ -10,4 +10,6 @@ import java.util.List;
 public interface CommentRespository extends JpaRepository<BlogComment, String> {
     List<BlogComment> findByBlogBlogId(String blogId);
     int countByBlogBlogId(String blogId);
+
+    List<BlogComment> findByBlog_BlogId(String blogId);
 }
