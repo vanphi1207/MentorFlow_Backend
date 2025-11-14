@@ -6,8 +6,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import vn.ihqqq.MentorFlow.constant.PredefinedRole;
 import vn.ihqqq.MentorFlow.dto.request.Mentor.MentorRequestDTO;
 import vn.ihqqq.MentorFlow.dto.response.Mentor.MentorRequestResponse;
+import vn.ihqqq.MentorFlow.entity.authentication.Role;
 import vn.ihqqq.MentorFlow.entity.user.MentorRequest;
 import vn.ihqqq.MentorFlow.entity.user.User;
 import vn.ihqqq.MentorFlow.enums.RequestStatus;
@@ -15,6 +17,7 @@ import vn.ihqqq.MentorFlow.exception.AppException;
 import vn.ihqqq.MentorFlow.exception.ErrorCode;
 import vn.ihqqq.MentorFlow.mapper.MentorRequestMapper;
 import vn.ihqqq.MentorFlow.repository.MentorRequestRepository;
+import vn.ihqqq.MentorFlow.repository.RoleRepository;
 import vn.ihqqq.MentorFlow.repository.UserRepository;
 
 import java.util.List;
@@ -29,6 +32,7 @@ public class MentorRequestService {
     MentorRequestRepository mentorRequestRepository;
     UserRepository userRepository;
     MentorRequestMapper mentorMapper;
+    RoleRepository roleRepository;
 
     public MentorRequestResponse createMentorRequest(String userId, MentorRequestDTO dto) {
         User user = userRepository.findById(userId)
@@ -64,8 +68,19 @@ public class MentorRequestService {
         }
 
         request.setStatus(RequestStatus.APPROVED);
-        MentorRequest saved = mentorRequestRepository.save(request);
-        return mentorMapper.toMentorRequestResponse(saved);
+        MentorRequest savedRequest  = mentorRequestRepository.save(request);
+
+        User user = request.getUser();
+
+        Role mentorRole = roleRepository.findById(PredefinedRole.MENTOR_ROLE)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        user.getRoles().clear();
+        user.getRoles().add(mentorRole);
+
+        userRepository.save(user);
+
+        return mentorMapper.toMentorRequestResponse(savedRequest);
     }
 
     //tu choi yeu cau

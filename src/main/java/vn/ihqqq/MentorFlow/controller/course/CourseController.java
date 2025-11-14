@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.ihqqq.MentorFlow.dto.request.course.CourseCreationRequest;
@@ -27,19 +29,20 @@ public class CourseController {
     CourseService courseService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public ApiResponse<CourseResponse> createCourse(
             @RequestPart("data") @Valid CourseCreationRequest request,
             @RequestPart(value = "fileImg", required = false) MultipartFile fileImg,
-            @RequestPart(value = "fileVideo", required = false) MultipartFile fileVideo
+            @RequestPart(value = "fileVideo", required = false) MultipartFile fileVideo,
+            Authentication authentication
     ) throws IOException {
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        String userId = jwt.getClaimAsString("user_id");
         ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(courseService.createCourse(request, fileImg, fileVideo));
+        apiResponse.setResult(courseService.createCourse(userId,request, fileImg, fileVideo));
         return apiResponse;
     }
 
     @GetMapping("/{courseId}")
-    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public ApiResponse<CourseResponse> getCourseById(@PathVariable String courseId) {
         return ApiResponse.<CourseResponse>builder()
                 .result(courseService.getCourseById(courseId))
@@ -47,7 +50,6 @@ public class CourseController {
     }
 
     @GetMapping("/courseDetails/{courseId}")
-    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public ApiResponse<CourseDetailsResponse> getCourseDetails(@PathVariable String courseId) {
         return ApiResponse.<CourseDetailsResponse>builder()
                 .result(courseService.getCourseDetails(courseId))
@@ -55,7 +57,6 @@ public class CourseController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('VIEW_COURSE')")
     public ApiResponse<List<CourseResponse>> getAllCourses() {
         return ApiResponse.<List<CourseResponse>>builder()
                 .result(courseService.GetAllCourses())
@@ -63,7 +64,6 @@ public class CourseController {
     }
 
     @PutMapping("/{courseId}")
-    @PreAuthorize("hasAuthority('UPDATE_COURSE')")
     public ApiResponse<CourseResponse> updateCourse(@RequestPart("data") @Valid CourseUpdateRequest request,
                                                     @PathVariable String courseId,
                                                     @RequestPart(value = "fileImg", required = false) MultipartFile fileImg,
@@ -76,11 +76,17 @@ public class CourseController {
     }
 
     @DeleteMapping("/{courseId}")
-    @PreAuthorize("hasAuthority('DELETE_COURSE')")
     public ApiResponse<String> deleteCourse(@PathVariable String courseId) {
         courseService.deleteCourse(courseId);
         return ApiResponse.<String>builder()
                 .result("Course deleted")
+                .build();
+    }
+
+    @GetMapping("/by-user/{userId}")
+    public ApiResponse<List<CourseResponse>> getCourseByUser(@PathVariable String userId) {
+        return ApiResponse.<List<CourseResponse>>builder()
+                .result(courseService.getCoursesByUserId(userId))
                 .build();
     }
 

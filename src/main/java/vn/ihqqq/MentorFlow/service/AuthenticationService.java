@@ -131,6 +131,7 @@ public class AuthenticationService {
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
+                .claim("user_id", user.getUserId())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

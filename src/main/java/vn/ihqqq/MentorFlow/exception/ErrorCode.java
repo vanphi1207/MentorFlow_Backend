@@ -19,6 +19,7 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     GENDER_INVALID(1007, "Gender must be MALE, FEMALE, OTHER, or PREFER_NOT_TO_SAY", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(1008, "You do not have permission", HttpStatus.FORBIDDEN),
+    ROLE_NOT_FOUND(1009, "Role not found", HttpStatus.NOT_FOUND),
 
 
 
@@ -63,6 +64,7 @@ public enum ErrorCode {
     REQUEST_NOT_FOUND(4001, "request not found", HttpStatus.BAD_REQUEST),
     REQUEST_BAD_REQUEST(4002, "request bad request", HttpStatus.BAD_REQUEST),
     SUBMITTED_REQUEST(4003, "You already submitted a mentor request", HttpStatus.BAD_REQUEST),
+    MENTOR_NOT_FOUNT(4004, "Mentor does not exist", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
