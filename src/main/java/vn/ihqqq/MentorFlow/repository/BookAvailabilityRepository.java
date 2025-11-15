@@ -41,4 +41,12 @@ public interface BookAvailabilityRepository extends JpaRepository<BookAvailabili
     @Query("SELECT CASE WHEN COUNT(ba) > 0 THEN true ELSE false END " +
             "FROM BookAvailability ba WHERE ba.bookAvailabilityId = :id AND ba.booking IS NOT NULL")
     boolean isSlotBooked(@Param("id") String id);
+
+
+    // Tìm tất cả lịch rảnh của mentor theo userId, có thể sắp xếp theo ngày
+    @Query("SELECT b FROM BookAvailability b " +
+            "WHERE b.user.userId = :userId " +
+            "AND b.booking IS NULL " +
+            "ORDER BY b.date ASC, b.slot.startTime ASC")
+    List<BookAvailability> findBookAvailabilityByUserId(@Param("userId") String userId);
 }

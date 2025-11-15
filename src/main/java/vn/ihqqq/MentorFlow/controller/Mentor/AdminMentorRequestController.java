@@ -42,6 +42,13 @@ public class AdminMentorRequestController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<MentorRequestResponse> getRequestById(@PathVariable("id") String id) {
+        return ApiResponse.<MentorRequestResponse>builder()
+                .result(mentorRequestService.getMentorById(id))
+                .build();
+    }
+
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteRequest(@PathVariable String id) {
         mentorRequestService.deleteRequest(id);

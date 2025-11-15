@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MentorRequestResponse {
     String Id;
+    String userId;
     String name;
     String avatar;
     String linkMeet;
