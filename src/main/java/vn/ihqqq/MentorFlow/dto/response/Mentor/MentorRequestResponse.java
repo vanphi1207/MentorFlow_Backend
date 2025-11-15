@@ -3,6 +3,8 @@ package vn.ihqqq.MentorFlow.dto.response.Mentor;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +15,7 @@ public class MentorRequestResponse {
     String name;
     String avatar;
     String linkMeet;
+    BigDecimal priceBooking;
     String companyName;
     String position;
     String field;

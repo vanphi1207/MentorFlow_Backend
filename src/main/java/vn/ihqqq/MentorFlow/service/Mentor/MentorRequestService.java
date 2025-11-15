@@ -45,6 +45,7 @@ public class MentorRequestService {
         MentorRequest mentor = MentorRequest.builder()
                 .user(user)
                 .linkMeet(dto.getLinkMeet())
+                .priceBooking(dto.getPriceBooking())
                 .avatar(dto.getAvatar())
                 .companyName(dto.getCompanyName())
                 .position(dto.getPosition())

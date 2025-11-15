@@ -3,6 +3,7 @@ package vn.ihqqq.MentorFlow.dto.response.booking;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Data
@@ -14,4 +15,5 @@ public class ScheduleSlotResponse {
     String slotId;
     LocalTime startTime;
     LocalTime endTime;
+    DayOfWeek dayOfWeek;
 }
