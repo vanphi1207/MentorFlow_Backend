@@ -64,8 +64,18 @@ public enum ErrorCode {
     REQUEST_NOT_FOUND(4001, "request not found", HttpStatus.BAD_REQUEST),
     REQUEST_BAD_REQUEST(4002, "request bad request", HttpStatus.BAD_REQUEST),
     SUBMITTED_REQUEST(4003, "You already submitted a mentor request", HttpStatus.BAD_REQUEST),
-    MENTOR_NOT_FOUNT(4004, "Mentor does not exist", HttpStatus.NOT_FOUND),
+
+
+    // Payment
+    PAYMENT_NOT_FOUND(5001, "Payment not found", HttpStatus.NOT_FOUND),
+    PAYMENT_ALREADY_EXISTS(5002, "Payment already exists for this course", HttpStatus.CONFLICT),
+    PAYMENT_FAILED(5003, "Payment failed", HttpStatus.BAD_REQUEST),
+    INVALID_PAYMENT_SIGNATURE(5004, "Invalid payment signature", HttpStatus.BAD_REQUEST),
+    COURSE_ALREADY_PURCHASED(5005, "You have already purchased this course", HttpStatus.CONFLICT),
+
     ;
+
+
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
