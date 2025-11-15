@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import vn.ihqqq.MentorFlow.dto.request.course.ModuleCreationRequest;
 import vn.ihqqq.MentorFlow.dto.request.course.ModuleUpdateRequest;
@@ -27,6 +28,8 @@ public class ModuleService {
     CourseRepository courseRepository;
     CourseModuleMapper moduleMapper;
 
+
+    @PreAuthorize("hasRole('MENTOR')")
     public ModuleResponse createModule(ModuleCreationRequest request){
         if (moduleRepository.existsByNameModule(request.getNameModule())) {
             throw new AppException(ErrorCode.NAME_MODULE_EXISTED);

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import vn.ihqqq.MentorFlow.dto.request.booking.ScheduleSlotRequest;
 import vn.ihqqq.MentorFlow.dto.response.booking.ScheduleSlotResponse;
@@ -13,6 +14,7 @@ import vn.ihqqq.MentorFlow.exception.ErrorCode;
 import vn.ihqqq.MentorFlow.mapper.ScheduleSlotMapper;
 import vn.ihqqq.MentorFlow.repository.ScheduleSlotRepository;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -29,21 +31,23 @@ public class ScheduleSlotService {
     private static final int MIN_SLOT_DURATION_MINUTES = 30;
     private static final int MAX_SLOT_DURATION_MINUTES = 180; // 3 hours
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ScheduleSlotResponse createSlot(ScheduleSlotRequest request) {
         LocalTime startTime = request.getStartTime();
         LocalTime endTime = request.getEndTime();
+        DayOfWeek dayOfWeek = request.getDayOfWeek();
 
         validateSlotTime(startTime, endTime);
 
-        if (scheduleSlotRepository.existsByStartTimeAndEndTime(startTime, endTime)) {
+        if (scheduleSlotRepository.existsByStartTimeAndEndTimeAndDayOfWeek(startTime, endTime, dayOfWeek)) {
             throw new AppException(ErrorCode.SLOT_ALREADY_EXISTS);
         }
 
         ScheduleSlot slot = scheduleSlotMapper.toScheduleSlot(request);
         ScheduleSlot savedSlot = scheduleSlotRepository.save(slot);
 
-        log.info("Schedule slot created: slotId={}, time={} - {}",
-                savedSlot.getSlotId(), startTime, endTime);
+        log.info("Schedule slot created: slotId={}, day={}, time={} - {}",
+                savedSlot.getSlotId(), dayOfWeek, startTime, endTime);
 
         return scheduleSlotMapper.toScheduleSlotResponse(savedSlot);
     }
@@ -62,6 +66,7 @@ public class ScheduleSlotService {
         return scheduleSlotMapper.toScheduleSlotResponse(slot);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteSlot(String slotId) {
         if (!scheduleSlotRepository.existsById(slotId)) {
             throw new AppException(ErrorCode.SLOT_NOT_FOUND);

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,10 @@ public class ScheduleSlot {
 
     LocalTime startTime;
     LocalTime endTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    DayOfWeek dayOfWeek;
 
     @OneToMany(mappedBy = "slot")
     private List<BookAvailability> bookAvailabilities = new ArrayList<>();

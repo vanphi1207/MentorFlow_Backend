@@ -5,6 +5,8 @@
     import lombok.experimental.FieldDefaults;
     import vn.ihqqq.MentorFlow.enums.RequestStatus;
 
+    import java.math.BigDecimal;
+
     @Getter
     @Setter
     @Builder
@@ -19,6 +21,7 @@
         private String id;
 
         private String linkMeet;
+        private BigDecimal priceBooking;
         private String avatar;
         private String companyName;
         private String position;

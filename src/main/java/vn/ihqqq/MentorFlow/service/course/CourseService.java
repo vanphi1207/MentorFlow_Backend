@@ -15,6 +15,7 @@
     import vn.ihqqq.MentorFlow.dto.response.course.CourseDetailsResponse;
     import vn.ihqqq.MentorFlow.dto.response.course.CourseResponse;
     import vn.ihqqq.MentorFlow.entity.course.Course;
+    import vn.ihqqq.MentorFlow.entity.user.User;
     import vn.ihqqq.MentorFlow.exception.AppException;
     import vn.ihqqq.MentorFlow.exception.ErrorCode;
     import vn.ihqqq.MentorFlow.mapper.CourseMapper;
@@ -31,6 +32,9 @@
     import java.util.List;
     import java.util.Map;
     import org.apache.commons.lang3.StringUtils;
+    import vn.ihqqq.MentorFlow.repository.MentorRequestRepository;
+    import vn.ihqqq.MentorFlow.repository.UserRepository;
+
     import java.util.UUID;
 
     @Service
@@ -42,11 +46,12 @@
         CourseMapper courseMapper;
         CourseRepository courseRepository;
         Cloudinary cloudinary;
+        UserRepository userRepository;
 
 
         @Transactional
         @PreAuthorize("hasRole('MENTOR')")
-        public CourseResponse createCourse(CourseCreationRequest request,
+        public CourseResponse createCourse(String userId, CourseCreationRequest request,
                                            MultipartFile fileImg,
                                            MultipartFile fileVideo) throws IOException {
 
@@ -54,7 +59,13 @@
                 throw new AppException(ErrorCode.TITTLE_COURSE_EXISTED);
             }
 
+
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
             Course course = courseMapper.toCourse(request);
+
+            course.setUser(user);
 
             // Upload ảnh
             if (fileImg != null && !fileImg.isEmpty()) {
@@ -253,6 +264,7 @@
 
 
         @Transactional
+        @PreAuthorize("hasRole('MENTOR') or hasRole('ADMIN')")
         public void deleteCourse(String id) {
             Course course = courseRepository.findById(id)
                     .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
@@ -293,6 +305,15 @@
                     .build();
         }
 
+
+        public List<CourseResponse> getCoursesByUserId(String userId) {
+
+            List<Course> courses = courseRepository.findByUser_UserId(userId);
+
+            return courses.stream()
+                    .map(courseMapper::toCourseResponse)
+                    .toList();
+        }
 
     }
 

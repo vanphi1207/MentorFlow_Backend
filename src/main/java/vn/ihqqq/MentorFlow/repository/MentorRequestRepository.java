@@ -13,4 +13,5 @@ public interface MentorRequestRepository extends JpaRepository<MentorRequest, St
     Optional<MentorRequest> findByUser_UserId(String userId);
 
     List<MentorRequest> findByStatus(RequestStatus status);
+
 }

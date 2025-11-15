@@ -24,4 +24,5 @@ public class CourseResponse {
     String videoDemo;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    String userId;
 }

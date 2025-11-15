@@ -3,6 +3,8 @@ package vn.ihqqq.MentorFlow.entity.course;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.entity.user.MentorRequest;
+import vn.ihqqq.MentorFlow.entity.user.User;
 import vn.ihqqq.MentorFlow.entity.user.UserCourse;
 import vn.ihqqq.MentorFlow.enums.Level;
 
@@ -35,6 +37,10 @@ public class Course {
     String thumbnailImg;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     List<CourseModule> modules = new ArrayList<>();

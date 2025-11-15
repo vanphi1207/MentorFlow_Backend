@@ -16,6 +16,7 @@ public interface MentorRequestMapper {
                         : null)
                 .avatar(mentor.getAvatar())
                 .linkMeet(mentor.getLinkMeet())
+                .priceBooking(mentor.getPriceBooking())
                 .companyName(mentor.getCompanyName())
                 .position(mentor.getPosition())
                 .field(mentor.getField())
@@ -23,4 +24,6 @@ public interface MentorRequestMapper {
                 .status(mentor.getStatus() != null ? mentor.getStatus().name() : null)
                 .build();
     }
+
+
 }

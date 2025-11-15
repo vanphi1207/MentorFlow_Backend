@@ -21,7 +21,6 @@ public class ScheduleSlotController {
     ScheduleSlotService scheduleSlotService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_SLOT')")
     public ApiResponse<ScheduleSlotResponse> createSlot(
             @Valid @RequestBody ScheduleSlotRequest request) {
         return ApiResponse.<ScheduleSlotResponse>builder()
@@ -44,7 +43,6 @@ public class ScheduleSlotController {
     }
 
     @DeleteMapping("/{slotId}")
-    @PreAuthorize("hasAuthority('DELETE_SLOT')")
     public ApiResponse<String> deleteSlot(@PathVariable String slotId) {
         scheduleSlotService.deleteSlot(slotId);
         return ApiResponse.<String>builder()
