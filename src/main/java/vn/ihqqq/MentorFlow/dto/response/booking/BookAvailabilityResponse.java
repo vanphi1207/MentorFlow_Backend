@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class BookAvailabilityResponse {
     String bookAvailabilityId;
     String userId;
+    String mentorId;
     String username;
     LocalDate date;
     boolean isBooked;

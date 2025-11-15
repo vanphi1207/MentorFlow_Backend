@@ -36,14 +36,11 @@ public class BookAvailabilityController {
                 .build();
     }
 
-    @GetMapping("/mentor/{mentorId}")
+    @GetMapping("/mentor/{userId}")
     public ApiResponse<List<BookAvailabilityResponse>> getAvailableSlotsByMentor(
-            @PathVariable String mentorId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @PathVariable String userId) {
         return ApiResponse.<List<BookAvailabilityResponse>>builder()
-                .result(bookAvailabilityService.getAvailableSlotsByMentor(
-                        mentorId, startDate, endDate))
+                .result(bookAvailabilityService.getAvailableSlotsByMentor(userId))
                 .build();
     }
 

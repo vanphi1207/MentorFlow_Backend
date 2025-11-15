@@ -111,6 +111,13 @@ public class MentorRequestService {
                 .map(mentorMapper::toMentorRequestResponse)
                 .collect(Collectors.toList());
     }
+    public MentorRequestResponse getMentorById(String mentorId) {
+        MentorRequest mentor = mentorRequestRepository.findById(mentorId)
+                .orElseThrow(() -> new AppException(ErrorCode.MODULE_NOT_FOUND));
+
+        return mentorMapper.toMentorRequestResponse(mentor);
+    }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteRequest(String requestId) {

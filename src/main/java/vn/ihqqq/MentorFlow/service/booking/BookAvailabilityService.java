@@ -69,13 +69,8 @@ public class BookAvailabilityService {
                 .toList();
     }
 
-    public List<BookAvailabilityResponse> getAvailableSlotsByMentor(
-            String mentorId, LocalDate startDate, LocalDate endDate) {
-
-        validateDateRange(startDate, endDate);
-
-        return bookAvailabilityRepository.findAvailableSlotsByUserAndDateRange(
-                        mentorId, startDate, endDate)
+    public List<BookAvailabilityResponse> getAvailableSlotsByMentor(String userId) {
+        return bookAvailabilityRepository.findBookAvailabilityByUserId(userId)
                 .stream()
                 .map(bookAvailabilityMapper::toBookAvailabilityResponse)
                 .toList();

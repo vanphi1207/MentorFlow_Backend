@@ -11,6 +11,7 @@ public interface MentorRequestMapper {
 
         return MentorRequestResponse.builder()
                 .Id(mentor.getId() != null ? mentor.getId().toString() : null)
+                .userId(mentor.getUser() != null ? mentor.getUser().getUserId() : null)
                 .name(mentor.getUser() != null
                         ? mentor.getUser().getFirstName() + " " + mentor.getUser().getLastName()
                         : null)
