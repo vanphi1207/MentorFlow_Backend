@@ -27,7 +27,7 @@ public class CourseController {
     CourseService courseService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_COURSE')")
+//    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public ApiResponse<CourseResponse> createCourse(
             @RequestPart("data") @Valid CourseCreationRequest request,
             @RequestPart(value = "fileImg", required = false) MultipartFile fileImg,

@@ -7,6 +7,7 @@
     import lombok.RequiredArgsConstructor;
     import lombok.experimental.FieldDefaults;
     import lombok.extern.slf4j.Slf4j;
+    import org.springframework.security.access.prepost.PreAuthorize;
     import org.springframework.stereotype.Service;
     import org.springframework.web.multipart.MultipartFile;
     import vn.ihqqq.MentorFlow.dto.request.course.CourseCreationRequest;
@@ -44,6 +45,7 @@
 
 
         @Transactional
+        @PreAuthorize("hasRole('MENTOR')")
         public CourseResponse createCourse(CourseCreationRequest request,
                                            MultipartFile fileImg,
                                            MultipartFile fileVideo) throws IOException {

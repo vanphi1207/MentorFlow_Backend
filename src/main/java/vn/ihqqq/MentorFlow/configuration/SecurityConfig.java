@@ -28,7 +28,7 @@ public class SecurityConfig {
 
 
     private final String[] PUBLIC_ENDPOINTS = {"/users", "/auth/token", "/auth/introspect", "/auth/logout",
-    "/auth/refresh", "/api/v1/courses"};
+    "/auth/refresh", "/api/v1/courses", "/payment/vnpay-return"};
 
     @Value("${jwt.signerKey}")
     private String singerKey;
