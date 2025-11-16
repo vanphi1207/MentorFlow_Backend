@@ -83,7 +83,6 @@ public class LessonService {
         //upload với resource_type = video
         cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
                 "public_id", publicValue,
-                "folder", "Course Lesson",
                 "resource_type", "video"
         ));
 
@@ -187,10 +186,6 @@ public class LessonService {
             }
 
             String afterUpload = String.join("/", Arrays.copyOfRange(parts, uploadIndex + 1, parts.length));
-
-            if (!afterUpload.startsWith("Course Lesson/")) {
-                afterUpload = "Course Lesson/" + afterUpload;
-            }
 
             String publicId = afterUpload.substring(0, afterUpload.lastIndexOf('.'));
 

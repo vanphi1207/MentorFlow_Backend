@@ -6,9 +6,11 @@ import vn.ihqqq.MentorFlow.dto.request.booking.BookingUpdateRequest;
 import vn.ihqqq.MentorFlow.dto.response.booking.BookingResponse;
 import vn.ihqqq.MentorFlow.entity.booking.Booking;
 import vn.ihqqq.MentorFlow.enums.BookingStatus;
+import vn.ihqqq.MentorFlow.repository.MentorRequestRepository;
 
 @Mapper(componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE    )
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        uses = {MentorRequestRepository.class})
 public interface BookingMapper {
 
     Booking toBooking(BookingCreationRequest request);

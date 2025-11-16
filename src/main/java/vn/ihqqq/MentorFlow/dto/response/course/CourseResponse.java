@@ -25,4 +25,6 @@ public class CourseResponse {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     String userId;
+    String mentorId;
+    String mentorName;
 }

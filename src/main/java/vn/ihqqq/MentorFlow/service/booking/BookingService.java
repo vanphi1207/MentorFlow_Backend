@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.ihqqq.MentorFlow.dto.request.booking.BookingCreationRequest;
@@ -19,6 +20,7 @@ import vn.ihqqq.MentorFlow.exception.ErrorCode;
 import vn.ihqqq.MentorFlow.mapper.BookingMapper;
 import vn.ihqqq.MentorFlow.repository.BookAvailabilityRepository;
 import vn.ihqqq.MentorFlow.repository.BookingRepository;
+import vn.ihqqq.MentorFlow.repository.MentorRequestRepository;
 import vn.ihqqq.MentorFlow.repository.UserRepository;
 
 import java.time.LocalDate;
@@ -36,6 +38,7 @@ public class BookingService {
     BookAvailabilityRepository bookAvailabilityRepository;
     UserRepository userRepository;
     BookingMapper bookingMapper;
+    MentorRequestRepository mentorRequestRepository;
 
     // Constants
     private static final int MAX_ACTIVE_BOOKINGS = 5;
@@ -90,6 +93,7 @@ public class BookingService {
                 .toList();
     }
 
+
     public List<BookingResponse> getBookingsForMentor(LocalDate startDate, LocalDate endDate) {
         User mentor = getCurrentUser();
         return bookingRepository.findByMentorAndDateRange(
@@ -114,6 +118,7 @@ public class BookingService {
         return bookingMapper.toBookingResponse(updatedBooking);
     }
 
+    @PreAuthorize("hasRole('MENTOR')")
     @Transactional
     public void cancelBooking(String bookingId, String cancelReason) {
         User currentUser = getCurrentUser();
@@ -133,6 +138,7 @@ public class BookingService {
                 bookingId, currentUser.getUserId(), cancelReason);
     }
 
+    @PreAuthorize("hasRole('MENTOR')")
     @Transactional
     public BookingResponse confirmBooking(String bookingId) {
         User mentor = getCurrentUser();
@@ -154,6 +160,7 @@ public class BookingService {
         return bookingMapper.toBookingResponse(confirmedBooking);
     }
 
+    @PreAuthorize("hasRole('MENTOR')")
     @Transactional
     public BookingResponse completeBooking(String bookingId) {
         User mentor = getCurrentUser();

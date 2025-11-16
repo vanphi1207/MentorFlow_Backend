@@ -25,6 +25,9 @@ public class CourseDetailsResponse {
     String videoDemo;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    String userId;
+    String mentorId;
+    String mentorName;
 
     List<ModuleWithLessonResponse> modules;
 }

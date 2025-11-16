@@ -42,6 +42,10 @@ public class Course {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "mentor_id")
+    private MentorRequest mentorRequest;
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     List<CourseModule> modules = new ArrayList<>();
 

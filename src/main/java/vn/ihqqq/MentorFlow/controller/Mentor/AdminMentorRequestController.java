@@ -49,12 +49,6 @@ public class AdminMentorRequestController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public ApiResponse<String> deleteRequest(@PathVariable String id) {
-        mentorRequestService.deleteRequest(id);
-        return ApiResponse.<String>builder()
-                .result("Mentor deleted")
-                .build();
-    }
+
 
 }

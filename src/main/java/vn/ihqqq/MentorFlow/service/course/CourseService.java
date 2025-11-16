@@ -15,6 +15,7 @@
     import vn.ihqqq.MentorFlow.dto.response.course.CourseDetailsResponse;
     import vn.ihqqq.MentorFlow.dto.response.course.CourseResponse;
     import vn.ihqqq.MentorFlow.entity.course.Course;
+    import vn.ihqqq.MentorFlow.entity.user.MentorRequest;
     import vn.ihqqq.MentorFlow.entity.user.User;
     import vn.ihqqq.MentorFlow.exception.AppException;
     import vn.ihqqq.MentorFlow.exception.ErrorCode;
@@ -47,6 +48,7 @@
         CourseRepository courseRepository;
         Cloudinary cloudinary;
         UserRepository userRepository;
+        MentorRequestRepository mentorRequestRepository;
 
 
         @Transactional
@@ -59,6 +61,9 @@
                 throw new AppException(ErrorCode.TITTLE_COURSE_EXISTED);
             }
 
+            MentorRequest mentorRequest = mentorRequestRepository.findByUser_UserId(userId)
+                    .orElseThrow(() -> new AppException(ErrorCode.REQUEST_NOT_FOUND));
+
 
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -66,6 +71,7 @@
             Course course = courseMapper.toCourse(request);
 
             course.setUser(user);
+            course.setMentorRequest(mentorRequest);
 
             // Upload ảnh
             if (fileImg != null && !fileImg.isEmpty()) {
@@ -93,8 +99,7 @@
             File fileUpload = convert(file);
             log.info("fileUpload is: {}", fileUpload);
             cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
-                    "public_id", publicValue,
-                    "folder", "course"
+                    "public_id", publicValue
             ));
 
             cleanDisk(fileUpload);
@@ -117,7 +122,6 @@
             //upload với resource_type = video
             cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
                     "public_id", publicValue,
-                    "folder", "course",
                     "resource_type", "video"
             ));
 
@@ -247,10 +251,6 @@
 
                 String afterUpload = String.join("/", Arrays.copyOfRange(parts, uploadIndex + 1, parts.length));
 
-                if (!afterUpload.startsWith("course/")) {
-                    afterUpload = "course/" + afterUpload;
-                }
-
                 String publicId = afterUpload.substring(0, afterUpload.lastIndexOf('.'));
 
                 log.info("Extracted publicId: {}", publicId);
@@ -286,6 +286,13 @@
             Course course = courseRepository.findById(courseId)
                     .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
 
+            String mentorName = "";
+            if (course.getUser() != null) {
+                String firstName = course.getUser().getFirstName() != null ? course.getUser().getFirstName() : "";
+                String lastName = course.getUser().getLastName() != null ? course.getUser().getLastName() : "";
+                mentorName = (firstName + " " + lastName).trim();
+            }
+
             return CourseDetailsResponse.builder()
                     .courseId(course.getCourseId())
                     .titleCourse(course.getTitleCourse())
@@ -298,6 +305,9 @@
                     .videoDemo(course.getVideoDemo())
                     .createdAt(course.getCreatedAt())
                     .updatedAt(course.getUpdatedAt())
+                    .userId(course.getUser().getUserId())
+                    .mentorId(course.getMentorRequest() != null ? course.getMentorRequest().getId() : null)
+                    .mentorName(mentorName)
                     .modules(course.getModules()
                             .stream()
                             .map(courseMapper::toModuleWithLessonResponse)

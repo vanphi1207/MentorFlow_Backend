@@ -74,8 +74,7 @@ public class BlogService {
         File fileUpload = convert(file);
         log.info("fileUpload is: {}", fileUpload);
         cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap(
-                "public_id", publicValue,
-                "folder", "blog"
+                "public_id", publicValue
         ));
 
         cleanDisk(fileUpload);

@@ -1,6 +1,5 @@
 package vn.ihqqq.MentorFlow.dto.response.booking;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.ihqqq.MentorFlow.enums.BookingStatus;
@@ -16,6 +15,7 @@ public class BookingResponse {
     String bookingId;
     String userId;
     String username;
+    String mentorAvatar;
     LocalTime time;
     String topic;
     String connectionForm;
