@@ -13,12 +13,9 @@ public interface BookAvailabilityMapper {
 
     BookAvailability toBookAvailability(BookAvailabilityRequest request);
 
-    @Mapping(source = "user.userId", target = "userId")
     @Mapping(source = "user.mentor.id", target = "mentorId")
-    @Mapping(source = "user.username", target = "username")
     @Mapping(source = "user", target = "fullName", qualifiedByName = "getFullName")
     @Mapping(source = "slot", target = "slot")
-    @Mapping(target = "isBooked", expression = "java(bookAvailability.isBooked())")
     BookAvailabilityResponse toBookAvailabilityResponse(BookAvailability bookAvailability);
 
 
