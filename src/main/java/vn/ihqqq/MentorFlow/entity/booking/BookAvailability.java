@@ -3,6 +3,7 @@ package vn.ihqqq.MentorFlow.entity.booking;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import vn.ihqqq.MentorFlow.entity.user.MentorRequest;
 import vn.ihqqq.MentorFlow.entity.user.User;
 
 import java.time.LocalDate;
@@ -20,13 +21,17 @@ public class BookAvailability {
     @GeneratedValue(strategy = GenerationType.UUID)
     String bookAvailabilityId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "slot_id")
     ScheduleSlot slot;
+
+    @ManyToOne
+    @JoinColumn(name = "mentor_id")
+    private MentorRequest mentor;
 
     LocalDate date;
 

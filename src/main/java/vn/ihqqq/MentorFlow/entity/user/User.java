@@ -79,4 +79,7 @@ public class User {
     @OneToMany(mappedBy = "following")
     private List<UserFollow> followings = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user")
+    private MentorRequest mentor;
+
 }
