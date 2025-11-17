@@ -12,12 +12,9 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookAvailabilityResponse {
     String bookAvailabilityId;
-    String userId;
     String mentorId;
     String fullName;
-    String username;
     LocalDate date;
-    boolean isBooked;
 
     ScheduleSlotResponse slot;
 }

@@ -13,9 +13,6 @@ import java.time.LocalTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingResponse {
     String bookingId;
-    String userId;
-    String username;
-    String mentorAvatar;
     LocalTime time;
     String topic;
     String connectionForm;
