@@ -31,7 +31,7 @@
         @Enumerated(EnumType.STRING)
         private RequestStatus status = RequestStatus.PENDING;
 
-        @ManyToOne
+        @OneToOne
         @JoinColumn(name = "user_id")
         private User user;
     }
