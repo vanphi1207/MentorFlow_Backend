@@ -10,6 +10,7 @@ import vn.ihqqq.MentorFlow.dto.request.booking.BookingCreationRequest;
 import vn.ihqqq.MentorFlow.dto.request.booking.BookingUpdateRequest;
 import vn.ihqqq.MentorFlow.dto.response.ApiResponse;
 import vn.ihqqq.MentorFlow.dto.response.booking.BookingResponse;
+import vn.ihqqq.MentorFlow.entity.user.User;
 import vn.ihqqq.MentorFlow.enums.BookingStatus;
 import vn.ihqqq.MentorFlow.service.booking.BookingService;
 
@@ -59,6 +60,13 @@ public class BookingController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return ApiResponse.<List<BookingResponse>>builder()
                 .result(bookingService.getBookingsForMentor(startDate, endDate))
+                .build();
+    }
+
+    @GetMapping("/mentor/all")
+    public ApiResponse<List<BookingResponse>> getAllBookingsForMentor() {
+        return ApiResponse.<List<BookingResponse>>builder()
+                .result(bookingService.getAllBookingsForMentor())
                 .build();
     }
 

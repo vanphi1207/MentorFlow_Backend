@@ -20,6 +20,10 @@ public class BookingResponse {
     String statusDisplay;
     String note;
 
+    String studentId;
+    String studentName;
+    String studentEmail;
+
     BookAvailabilityResponse bookAvailability;
 
 }

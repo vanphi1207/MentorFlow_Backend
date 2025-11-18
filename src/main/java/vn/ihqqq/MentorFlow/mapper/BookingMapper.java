@@ -14,8 +14,13 @@ public interface BookingMapper {
 
     Booking toBooking(BookingCreationRequest request);
 
+    @Mapping(source = "user.userId", target = "studentId")
+    @Mapping(source = "user", target = "studentName", qualifiedByName = "getStudentFullName")
+    @Mapping(source = "user.email", target = "studentEmail")
     @Mapping(source = "bookAvailability.bookAvailabilityId", target = "bookAvailability.bookAvailabilityId")
     @Mapping(source = "bookAvailability.user.mentor.id", target = "bookAvailability.mentorId")
+    @Mapping(source = "bookAvailability.user.mentor.avatar", target = "bookAvailability.mentorAvatar")
+    @Mapping(source = "bookAvailability.user.mentor.linkMeet", target = "bookAvailability.linkMeet")
     @Mapping(source = "bookAvailability.user", target = "bookAvailability.fullName", qualifiedByName = "getMentorFullName")
     @Mapping(source = "bookAvailability.date", target = "bookAvailability.date")
     @Mapping(source = "bookAvailability.slot", target = "bookAvailability.slot")
@@ -32,6 +37,16 @@ public interface BookingMapper {
 
     @Named("getMentorFullName")
     default String getMentorFullName(vn.ihqqq.MentorFlow.entity.user.User user) {
+        if (user == null) {
+            return null;
+        }
+        String firstName = user.getFirstName() != null ? user.getFirstName() : "";
+        String lastName = user.getLastName() != null ? user.getLastName() : "";
+        return (firstName + " " + lastName).trim();
+    }
+
+    @Named("getStudentFullName")
+    default String getStudentFullName(vn.ihqqq.MentorFlow.entity.user.User user) {
         if (user == null) {
             return null;
         }

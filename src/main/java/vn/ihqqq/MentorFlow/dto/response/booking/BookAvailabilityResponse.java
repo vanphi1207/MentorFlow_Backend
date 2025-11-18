@@ -14,6 +14,8 @@ public class BookAvailabilityResponse {
     String bookAvailabilityId;
     String mentorId;
     String fullName;
+    String mentorAvatar;
+    String linkMeet;
     LocalDate date;
 
     ScheduleSlotResponse slot;

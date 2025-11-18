@@ -15,7 +15,9 @@ public interface BookAvailabilityMapper {
 
     @Mapping(source = "user.mentor.id", target = "mentorId")
     @Mapping(source = "user", target = "fullName", qualifiedByName = "getFullName")
+    @Mapping(source = "user.mentor.linkMeet", target = "linkMeet")
     @Mapping(source = "slot", target = "slot")
+    @Mapping(source = "user.mentor.avatar", target = "mentorAvatar")
     BookAvailabilityResponse toBookAvailabilityResponse(BookAvailability bookAvailability);
 
 

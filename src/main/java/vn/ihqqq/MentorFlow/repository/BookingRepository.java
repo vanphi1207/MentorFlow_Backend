@@ -32,6 +32,10 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             @Param("endDate") LocalDate endDate
     );
 
+    // Trong BookingRepository.java
+    @Query("SELECT b FROM Booking b WHERE b.bookAvailability.user.userId = :mentorId")
+    List<Booking> findByMentor(@Param("mentorId") String mentorId);
+
     @Query("SELECT COUNT(b) FROM Booking b WHERE b.user.userId = :userId " +
             "AND b.status IN ('PENDING', 'CONFIRMED')")
     long countActiveBookingsByUserId(@Param("userId") String userId);

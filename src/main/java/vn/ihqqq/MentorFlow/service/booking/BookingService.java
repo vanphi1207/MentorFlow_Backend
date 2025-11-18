@@ -103,6 +103,14 @@ public class BookingService {
                 .toList();
     }
 
+    public List<BookingResponse> getAllBookingsForMentor() {
+        User mentor = getCurrentUser();
+        return bookingRepository.findByMentor(mentor.getUserId())
+                .stream()
+                .map(bookingMapper::toBookingResponse)
+                .toList();
+    }
+
     @Transactional
     public BookingResponse updateBooking(String bookingId, BookingUpdateRequest request) {
         User currentUser = getCurrentUser();
