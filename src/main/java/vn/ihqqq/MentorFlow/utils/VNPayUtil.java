@@ -67,23 +67,41 @@ public class VNPayUtil {
     }
 
     public static String hashAllFields(Map<String, String> fields, String secretKey) {
-        List<String> fieldNames = new ArrayList<>(fields.keySet());
+        // Loại bỏ vnp_SecureHash và vnp_SecureHashType
+        Map<String, String> cleanFields = new HashMap<>(fields);
+        cleanFields.remove("vnp_SecureHash");
+        cleanFields.remove("vnp_SecureHashType");
+
+        // Sắp xếp theo alphabet
+        List<String> fieldNames = new ArrayList<>(cleanFields.keySet());
         Collections.sort(fieldNames);
-        StringBuilder sb = new StringBuilder();
+
+        StringBuilder hashData = new StringBuilder();
         Iterator<String> itr = fieldNames.iterator();
+
         while (itr.hasNext()) {
             String fieldName = itr.next();
-            String fieldValue = fields.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                sb.append(fieldName);
-                sb.append("=");
-                sb.append(fieldValue);
-            }
-            if (itr.hasNext()) {
-                sb.append("&");
+            String fieldValue = cleanFields.get(fieldName);
+
+            if (fieldValue != null && fieldValue.length() > 0) {
+                // ✅ KHÔNG decode, giữ nguyên giá trị từ URL
+                hashData.append(fieldName);
+                hashData.append("=");
+                hashData.append(fieldValue); // GIỮ NGUYÊN URL ENCODED
+
+                if (itr.hasNext()) {
+                    hashData.append("&");
+                }
             }
         }
-        return hmacSHA512(secretKey, sb.toString());
+
+        String dataToHash = hashData.toString();
+        log.info("Data to hash: {}", dataToHash);
+
+        String result = hmacSHA512(secretKey, dataToHash);
+        log.info("Calculated hash: {}", result);
+
+        return result;
     }
 
     public static String getIpAddress(jakarta.servlet.http.HttpServletRequest request) {

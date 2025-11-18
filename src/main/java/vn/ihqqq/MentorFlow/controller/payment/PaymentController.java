@@ -15,6 +15,7 @@ import vn.ihqqq.MentorFlow.enums.PaymentStatus;
 import vn.ihqqq.MentorFlow.service.payment.PaymentService;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,27 @@ public class PaymentController {
     }
 
     @GetMapping("/vnpay-return")
-    public ApiResponse<PaymentResponse> vnpayReturn(@RequestParam Map<String, String> params) {
+    public ApiResponse<PaymentResponse> vnpayReturn(HttpServletRequest request) {
+        // ✅ Lấy raw query string từ URL (chưa decode)
+        String queryString = request.getQueryString();
+
+        log.info("Raw query string: {}", queryString);
+
+        // ✅ Parse params thủ công
+        Map<String, String> params = new HashMap<>();
+
+        if (queryString != null && !queryString.isEmpty()) {
+            String[] pairs = queryString.split("&");
+            for (String pair : pairs) {
+                int idx = pair.indexOf("=");
+                if (idx > 0) {
+                    String key = pair.substring(0, idx);
+                    String value = pair.substring(idx + 1);
+                    params.put(key, value);
+                }
+            }
+        }
+
         return ApiResponse.<PaymentResponse>builder()
                 .result(paymentService.handleVNPayReturn(params))
                 .build();
@@ -54,6 +75,7 @@ public class PaymentController {
     @GetMapping("/my-payments/status/{status}")
     public ApiResponse<List<PaymentResponse>> getMyPaymentsByStatus(
             @PathVariable PaymentStatus status) {
+
         return ApiResponse.<List<PaymentResponse>>builder()
                 .result(paymentService.getMyPaymentsByStatus(status))
                 .build();

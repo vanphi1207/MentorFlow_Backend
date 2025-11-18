@@ -27,6 +27,7 @@ import vn.ihqqq.MentorFlow.service.UserService;
 import vn.ihqqq.MentorFlow.utils.VNPayUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -159,28 +160,93 @@ public class PaymentService {
         return paymentUrl;
     }
 
+//    @Transactional
+//    public PaymentResponse handleVNPayReturn(Map<String, String> params) {
+//        String vnpSecureHash = params.get("vnp_SecureHash");
+//        params.remove("vnp_SecureHashType");
+//        params.remove("vnp_SecureHash");
+//
+//        // Verify signature
+//        String signValue = VNPayUtil.hashAllFields(params, vnPayConfig.getHashSecret());
+//
+//        if (!signValue.equals(vnpSecureHash)) {
+//            log.error("Invalid signature");
+//            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+//        }
+//
+//        String txnRef = params.get("vnp_TxnRef");
+//        String responseCode = params.get("vnp_ResponseCode");
+//        String transactionNo = params.get("vnp_TransactionNo");
+//        String bankCode = params.get("vnp_BankCode");
+//        String cardType = params.get("vnp_CardType");
+//
+//        Payment payment = paymentRepository.findByTransactionNo(txnRef)
+//                .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION));
+//
+//        if ("00".equals(responseCode)) {
+//            payment.setStatus(PaymentStatus.SUCCESS);
+//            payment.setVnpayTransactionNo(transactionNo);
+//            payment.setBankCode(bankCode);
+//            payment.setCardType(cardType);
+//            payment.setVnpayResponseCode(responseCode);
+//
+//            // Tạo UserCourse khi thanh toán thành công
+//            createUserCourse(payment);
+//
+//            log.info("Payment successful: {}", txnRef);
+//        } else {
+//            payment.setStatus(PaymentStatus.FAILED);
+//            payment.setVnpayResponseCode(responseCode);
+//            log.warn("Payment failed: {} - Response code: {}", txnRef, responseCode);
+//        }
+//
+//        Payment savedPayment = paymentRepository.save(payment);
+//        return paymentMapper.toPaymentResponse(savedPayment);
+//    }
+
     @Transactional
     public PaymentResponse handleVNPayReturn(Map<String, String> params) {
+        log.info("=== VNPay Return Params (Raw) ===");
+        params.forEach((key, value) -> log.info("{}: {}", key, value));
+
+        // ✅ Lấy secure hash
         String vnpSecureHash = params.get("vnp_SecureHash");
-        params.remove("vnp_SecureHashType");
-        params.remove("vnp_SecureHash");
 
-        // Verify signature
-        String signValue = VNPayUtil.hashAllFields(params, vnPayConfig.getHashSecret());
+        // ✅ Tính hash với params RAW (chưa decode)
+        String calculatedHash = VNPayUtil.hashAllFields(params, vnPayConfig.getHashSecret());
 
-        if (!signValue.equals(vnpSecureHash)) {
-            log.error("Invalid signature");
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        log.info("Received hash:   {}", vnpSecureHash);
+        log.info("Calculated hash: {}", calculatedHash);
+
+        // ✅ So sánh
+        if (!calculatedHash.equalsIgnoreCase(vnpSecureHash)) {
+            log.error("❌ Signature mismatch!");
+            throw new AppException(ErrorCode.INVALID_PAYMENT_SIGNATURE);
         }
 
+        log.info("✅ Signature valid!");
+
+        // ✅ Decode params khi sử dụng
         String txnRef = params.get("vnp_TxnRef");
         String responseCode = params.get("vnp_ResponseCode");
         String transactionNo = params.get("vnp_TransactionNo");
         String bankCode = params.get("vnp_BankCode");
         String cardType = params.get("vnp_CardType");
 
+        // ✅ Decode orderInfo nếu cần hiển thị
+        String orderInfo = params.get("vnp_OrderInfo");
+        try {
+            orderInfo = URLDecoder.decode(orderInfo, StandardCharsets.UTF_8);
+            log.info("Decoded order info: {}", orderInfo);
+        } catch (Exception e) {
+            log.warn("Cannot decode orderInfo: {}", orderInfo);
+        }
+
         Payment payment = paymentRepository.findByTransactionNo(txnRef)
-                .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION));
+                .orElseThrow(() -> {
+                    log.error("❌ Payment not found: {}", txnRef);
+                    return new AppException(ErrorCode.PAYMENT_NOT_FOUND);
+                });
 
         if ("00".equals(responseCode)) {
             payment.setStatus(PaymentStatus.SUCCESS);
@@ -189,14 +255,12 @@ public class PaymentService {
             payment.setCardType(cardType);
             payment.setVnpayResponseCode(responseCode);
 
-            // Tạo UserCourse khi thanh toán thành công
             createUserCourse(payment);
-
-            log.info("Payment successful: {}", txnRef);
+            log.info("✅ Payment successful: {}", txnRef);
         } else {
             payment.setStatus(PaymentStatus.FAILED);
             payment.setVnpayResponseCode(responseCode);
-            log.warn("Payment failed: {} - Response code: {}", txnRef, responseCode);
+            log.warn("⚠️ Payment failed: {} - code: {}", txnRef, responseCode);
         }
 
         Payment savedPayment = paymentRepository.save(payment);
